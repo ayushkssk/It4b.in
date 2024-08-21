@@ -1,3 +1,7 @@
+// Define default credentials for demo purposes
+const defaultUserID = "ayushkssk";
+const defaultPassword = "ayush";
+
 // Signup Validation and Logic
 document.getElementById('signupForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Prevent default form submission
@@ -96,11 +100,18 @@ document.getElementById('loginForm')?.addEventListener('submit', function (e) {
 
     const storedUserDetails = JSON.parse(localStorage.getItem('userDetails'));
 
-    // Check if the stored credentials match the entered credentials
-    if (storedUserDetails && storedUserDetails.userID === enteredUserID && storedUserDetails.password === enteredPassword) {
+    // Check if entered credentials match the default or stored credentials
+    if (
+        (storedUserDetails && storedUserDetails.userID === enteredUserID && storedUserDetails.password === enteredPassword) ||
+        (enteredUserID === defaultUserID && enteredPassword === defaultPassword)
+    ) {
+        const fullName = storedUserDetails
+            ? `${storedUserDetails.firstName} ${storedUserDetails.lastName}`
+            : "Demo User";
+
         sessionStorage.setItem('loggedIn', true);
-        sessionStorage.setItem('userFullName', `${storedUserDetails.firstName} ${storedUserDetails.lastName}`);
-        alert(`Welcome, ${storedUserDetails.firstName} ${storedUserDetails.lastName} 😊❤️`);
+        sessionStorage.setItem('userFullName', fullName);
+        alert(`Welcome, ${fullName} 😊❤️`);
         window.location.href = 'dashboard.html'; // Redirect to the dashboard
     } else {
         alert('Incorrect User ID or password. Please try again.');
