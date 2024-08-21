@@ -45,7 +45,7 @@ document.getElementById('signupForm').addEventListener('submit', function (e) {
         alert("Password is required.");
     }
 
-    // If the form is valid, show the popup
+    // If the form is valid, store the details and show the popup
     if (isValid) {
         // Storing user data in localStorage
         const userDetails = {
@@ -71,6 +71,12 @@ document.getElementById('togglePassword').addEventListener('click', function () 
     passwordField.setAttribute('type', type);
 });
 
+document.getElementById('toggleLoginPassword').addEventListener('click', function () {
+    const passwordField = document.getElementById('loginPassword');
+    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordField.setAttribute('type', type);
+});
+
 // Close Popup and Redirect to Login Page
 document.getElementById('loginButton').addEventListener('click', function () {
     window.location.href = 'login.html';
@@ -79,4 +85,24 @@ document.getElementById('loginButton').addEventListener('click', function () {
 document.getElementById('closePopupButton').addEventListener('click', function () {
     const signupSuccessPopup = document.getElementById('signupSuccessPopup');
     signupSuccessPopup.classList.add('hidden');
+});
+
+// Login Logic with Credential Verification and Redirect to Dashboard
+document.getElementById('loginForm')?.addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const enteredUserID = document.getElementById('loginUserID').value.trim();
+    const enteredPassword = document.getElementById('loginPassword').value.trim();
+
+    const storedUserDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+    // Check if the stored credentials match the entered credentials
+    if (storedUserDetails && storedUserDetails.userID === enteredUserID && storedUserDetails.password === enteredPassword) {
+        sessionStorage.setItem('loggedIn', true);
+        sessionStorage.setItem('userFullName', `${storedUserDetails.firstName} ${storedUserDetails.lastName}`);
+        alert(`Welcome, ${storedUserDetails.firstName} ${storedUserDetails.lastName} 😊❤️`);
+        window.location.href = 'dashboard.html'; // Redirect to the dashboard
+    } else {
+        alert('Incorrect User ID or password. Please try again.');
+    }
 });
